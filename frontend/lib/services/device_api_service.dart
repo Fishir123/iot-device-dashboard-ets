@@ -5,8 +5,9 @@ import 'package:http/http.dart' as http;
 import '../models/device_model.dart';
 
 class DeviceApiService {
-  // TODO: ganti dengan endpoint MockAPI kamu
-  static const String baseUrl = 'https://mockapi.io/api/v1/devices';
+  // Untuk Android Emulator: gunakan 10.0.2.2
+  // Untuk device fisik/LAN: ganti ke IP server, contoh 192.168.1.20
+  static const String baseUrl = 'http://10.0.2.2:3000/api/devices';
 
   Future<List<DeviceModel>> fetchDevices() async {
     final response = await http.get(Uri.parse(baseUrl));

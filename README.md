@@ -1,50 +1,74 @@
-# IoT Device Status Dashboard (ETS)
+# IoT Device Dashboard Monorepo (ETS)
 
-Project Flutter untuk ETS Workshop Pemrograman Perangkat Bergerak.
+Project ETS sekarang dijadikan **satu folder** dengan pemisahan:
 
-## Tema
-Opsi E — IoT Device Status Dashboard
-
-## Fitur
-- Menampilkan daftar device
-- Status online/offline
-- Last seen
-- Battery & signal level
-- Fetch data dari API
-- Cache lokal (Hive) saat koneksi gagal
-
-## Stack
-- Flutter
-- Provider (state management)
-- HTTP (API)
-- Hive (local cache)
+- `frontend/` -> Flutter app (UI + state management + cache)
+- `backend/` -> Express.js API buatan sendiri
 
 ## Struktur
-- `lib/models` -> model data
-- `lib/services` -> API + cache service
-- `lib/providers` -> state management
-- `lib/screens` -> UI halaman
-- `lib/widgets` -> komponen UI reusable
 
-## Setup
-1. Install Flutter SDK
-2. Jalankan:
-   ```bash
-   flutter pub get
-   flutter run
-   ```
-3. Ganti `baseUrl` di `lib/services/device_api_service.dart` dengan endpoint MockAPI kamu.
+```bash
+iot_device_dashboard/
+├── frontend/
+│   ├── lib/
+│   ├── pubspec.yaml
+│   └── ...
+└── backend/
+    ├── src/index.js
+    └── package.json
+```
 
-## Contoh JSON API
+---
+
+## 1) Jalankan Backend (Express API)
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+Default API berjalan di:
+- `http://localhost:3000`
+- endpoint data: `http://localhost:3000/api/devices`
+
+Endpoint tersedia:
+- `GET /api/devices`
+- `GET /api/devices/:id`
+- `POST /api/devices`
+- `PUT /api/devices/:id`
+- `DELETE /api/devices/:id`
+
+---
+
+## 2) Jalankan Frontend (Flutter)
+
+```bash
+cd frontend
+flutter pub get
+flutter run
+```
+
+File API config frontend:
+- `frontend/lib/services/device_api_service.dart`
+
+Default sekarang:
+- `http://10.0.2.2:3000/api/devices` (untuk Android Emulator)
+
+Kalau pakai device fisik, ganti ke IP LAN server, contoh:
+- `http://192.168.1.20:3000/api/devices`
+
+---
+
+## Contoh JSON Device
+
 ```json
-[
-  {
-    "id": "1",
-    "device_name": "Sensor Ruang 1",
-    "status": "online",
-    "last_seen": "2026-04-14T07:30:00Z",
-    "battery": 86,
-    "signal": 74
-  }
-]
+{
+  "id": "1",
+  "device_name": "ESP32 Ruang Tamu",
+  "status": "online",
+  "last_seen": "2026-04-14T08:00:00Z",
+  "battery": 88,
+  "signal": 76
+}
 ```
