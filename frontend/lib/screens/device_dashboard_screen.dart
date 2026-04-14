@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/device_provider.dart';
 import '../widgets/device_card.dart';
+import 'device_detail_screen.dart';
 
 class DeviceDashboardScreen extends StatefulWidget {
   const DeviceDashboardScreen({super.key});
@@ -53,9 +54,19 @@ class _DeviceDashboardScreenState extends State<DeviceDashboardScreen> {
                     child: Center(child: Text('Belum ada data device.')),
                   )
                 else
-                  ...provider.devices
-                      .map((device) => DeviceCard(device: device))
-                      .toList(),
+                  ...provider.devices.map(
+                    (device) => DeviceCard(
+                      device: device,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => DeviceDetailScreen(device: device),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
               ],
             ),
           );
