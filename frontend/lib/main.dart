@@ -18,6 +18,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final base = ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: Colors.teal,
+    );
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DeviceProvider()),
@@ -25,9 +30,20 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'IoT Device Dashboard',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorSchemeSeed: Colors.teal,
+        theme: base.copyWith(
+          scaffoldBackgroundColor: const Color(0xFFF6F8FB),
+          appBarTheme: const AppBarTheme(
+            centerTitle: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
+          cardTheme: const CardThemeData(
+            elevation: 0,
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+          ),
         ),
         home: const DeviceDashboardScreen(),
       ),
