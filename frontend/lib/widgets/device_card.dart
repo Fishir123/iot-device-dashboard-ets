@@ -17,100 +17,137 @@ class DeviceCard extends StatelessWidget {
         : '-';
 
     final statusColor = isOnline ? Colors.green : Colors.red;
+    final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardTop = isDark ? cs.surfaceContainerHigh : Colors.white;
+    final cardBottom = isDark
+        ? cs.primary.withValues(alpha: 0.2)
+        : cs.primary.withValues(alpha: 0.045);
 
-    return Card(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundColor: statusColor.withValues(alpha: 0.12),
-                    child: Icon(
-                      Icons.memory_rounded,
-                      color: statusColor,
-                      size: 18,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          device.deviceName,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Text(
-                          'Last seen: $lastSeenText',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: statusColor.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      isOnline ? 'ONLINE' : 'OFFLINE',
-                      style: TextStyle(
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            cardTop,
+            cardBottom,
+          ],
+        ),
+        border: Border.all(
+          color: isDark
+              ? cs.outline.withValues(alpha: 0.35)
+              : cs.primary.withValues(alpha: 0.08),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.28 : 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: statusColor.withValues(alpha: 0.12),
+                      child: Icon(
+                        Icons.memory_rounded,
                         color: statusColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 11,
+                        size: 19,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              _MetricBar(
-                label: 'Battery',
-                value: device.battery,
-                color: Colors.teal,
-                icon: Icons.battery_charging_full_rounded,
-              ),
-              const SizedBox(height: 8),
-              _MetricBar(
-                label: 'Signal',
-                value: device.signal,
-                color: Colors.blue,
-                icon: Icons.wifi_rounded,
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Lihat detail',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade700,
-                      fontWeight: FontWeight.w600,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            device.deviceName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Last seen: $lastSeenText',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: cs.onSurface.withValues(alpha: 0.72),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  const Icon(Icons.chevron_right_rounded, size: 18),
-                ],
-              ),
-            ],
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: statusColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: statusColor.withValues(alpha: 0.26),
+                        ),
+                      ),
+                      child: Text(
+                        isOnline ? 'ONLINE' : 'OFFLINE',
+                        style: TextStyle(
+                          color: statusColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                _MetricBar(
+                  label: 'Battery',
+                  value: device.battery,
+                  color: cs.primary,
+                  icon: Icons.battery_charging_full_rounded,
+                ),
+                const SizedBox(height: 8),
+                _MetricBar(
+                  label: 'Signal',
+                  value: device.signal,
+                  color: Colors.blue,
+                  icon: Icons.wifi_rounded,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Lihat detail',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: cs.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.chevron_right_rounded,
+                        size: 18, color: cs.primary),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -134,6 +171,7 @@ class _MetricBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final safeValue = value.clamp(0, 100);
+    final cs = Theme.of(context).colorScheme;
 
     return Row(
       children: [
@@ -148,10 +186,10 @@ class _MetricBar extends StatelessWidget {
         ),
         Expanded(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
               value: safeValue / 100,
-              minHeight: 8,
+              minHeight: 9,
               backgroundColor: color.withValues(alpha: 0.15),
               valueColor: AlwaysStoppedAnimation(color),
             ),
@@ -160,7 +198,11 @@ class _MetricBar extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           '$safeValue%',
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: cs.onSurface.withValues(alpha: 0.82),
+          ),
         ),
       ],
     );

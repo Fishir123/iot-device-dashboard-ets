@@ -1,13 +1,29 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/device_model.dart';
 
 class DeviceApiService {
-  // Untuk Android Emulator: gunakan 10.0.2.2
-  // Untuk device fisik/LAN: ganti ke IP server, contoh 192.168.1.20
-  static const String baseUrl = 'http://10.0.2.2:3000/api/devices';
+  static const String _apiBaseUrlFromEnv =
+      String.fromEnvironment('API_BASE_URL');
+
+  String get baseUrl {
+    if (_apiBaseUrlFromEnv.isNotEmpty) {
+      return _apiBaseUrlFromEnv;
+    }
+
+    if (kIsWeb) {
+      return 'http://localhost:3000/api/devices';
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return 'http://10.0.2.2:3000/api/devices';
+    }
+
+    return 'http://localhost:3000/api/devices';
+  }
 
   Future<List<DeviceModel>> fetchDevices() async {
     final response = await http.get(Uri.parse(baseUrl));
